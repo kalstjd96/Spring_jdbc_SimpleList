@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jang.biz.mapper.CardMapper">
+	
+	<select id="getCardList" resultType="Card">
+		SELECT bno
+			,bname
+			,phone
+			,description
+		FROM bcard order by bno asc
+	</select>
+	
+	<select id="getCard" parameterType="int" resultType="Card">
+		SELECT bno
+			,bname
+			,phone
+			,description
+		FROM bcard
+		WHERE bno = #{bno}
+	</select>
+	<delete id="deleteCard">
+		DELETE
+		FROM bcard
+		WHERE bno = #{bno}
+	</delete>
+
+	<insert id="addCard" keyProperty="bno">
+		<selectKey keyProperty="bno" resultType="int" order="BEFORE">
+			SELECT
+			COALESCE(MAX(bno), 0) + 1 AS bno
+			FROM bcard
+		</selectKey>
+		INSERT INTO bcard (
+			bno
+			,bname
+			,phone
+			,description
+		) VALUES (
+			#{bno}
+			,#{bname}
+			,#{phone}
+			,#{description}
+		)
+	</insert>
+	<update id="updateCard" parameterType="Card">
+		UPDATE bcard
+		SET
+		bname =
+		#{bname}
+		,phone = #{phone}
+		,description = #{description}
+		WHERE bno =
+		#{bno}
+	</update>
+</mapper>
